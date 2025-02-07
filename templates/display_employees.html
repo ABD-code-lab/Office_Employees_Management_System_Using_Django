@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-4 text-center">Employee List</h1>
+
+        <!-- Search Input -->
+        <div class="mb-4 flex justify-end">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by name, email, or position..."
+                class="w-[30%] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                autocomplete='off'
+            />
+        </div>
+
+        <table class="w-full border border-gray-500 my-5">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border px-4 py-2">ID</th>
+                    <th class="border px-4 py-2">Name</th>
+                    <th class="border px-4 py-2">Email</th>
+                    <th class="border px-4 py-2">Position</th>
+                    <th class="border px-4 py-2">Department</th>
+                    <th class="border px-4 py-2">Salary</th>
+                    <th class="border px-4 py-2">Action</th>
+                </tr>
+            </thead>
+            <tbody id="employeeTableBody">
+                {% for emp in employees %}
+                <tr class="text-center">
+                    <td class="border px-4 py-2">{{ emp.id }}</td>
+                    <td class="border px-4 py-2">{{ emp.name }}</td>
+                    <td class="border px-4 py-2">{{ emp.email }}</td>
+                    <td class="border px-4 py-2">{{ emp.position }}</td>
+                    <td class="border px-4 py-2">{{ emp.department }}</td>
+                    <td class="border px-4 py-2">${{ emp.salary }}</td>
+                    <td class="border px-4 py-2">
+                        <a href="{% url 'delete_emp' %}?id={{ emp.id }}" class="text-red-600 hover:text-red-800">Delete</a> |
+                        <a href="{% url 'update_emp' %}?id={{ emp.id }}" class="text-red-600 hover:text-red-800">Edit</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center py-4 text-gray-500">No employees found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="/add_emp" class="my-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add An Employee</a>
+
+        <a href="/" class="my-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Go back to home</a>
+    </div>
+
+    <!-- JavaScript for Search Functionality -->
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase(); // Get the search term
+            const rows = document.querySelectorAll('#employeeTableBody tr'); // Get all table rows
+
+            rows.forEach(row => {
+                const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase(); // Name column
+                const email = row.querySelector('td:nth-child(3)').textContent.toLowerCase(); // Email column
+                const position = row.querySelector('td:nth-child(4)').textContent.toLowerCase(); // Position column
+
+                // Check if the search term matches any of the columns
+                if (name.includes(searchTerm) || email.includes(searchTerm) || position.includes(searchTerm)) {
+                    row.style.display = ''; // Show the row
+                } else {
+                    row.style.display = 'none'; // Hide the row
+                }
+            });
+        });
+    </script>
+</body>
+</html>

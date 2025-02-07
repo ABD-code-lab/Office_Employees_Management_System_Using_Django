@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6 text-center">Edit Employee</h1>
+        <form class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md" method="post" action="{% url 'update_emp' %}">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ employee.id }}">
+
+            <!-- Name -->
+            <div class="mb-4">
+                <label for="name" class="block text-sm font-medium text-gray-700">Employee Name</label>
+                <input autocomplete="off" type="text" id="name" name="name" value="{{ employee.name }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Employee Email</label>
+                <input autocomplete="off" type="email" id="email" name="email" value="{{ employee.email }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+            </div>
+
+            <!-- Position -->
+            <div class="mb-4">
+                <label for="position" class="block text-sm font-medium text-gray-700">Position</label>
+                <input autocomplete="off" type="text" id="position" name="position" value="{{ employee.position }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+            </div>
+
+            <!-- Department -->
+            <div class="mb-4">
+                <label for="department" class="block text-sm font-medium text-gray-700">Department</label>
+                <select id="department" name="department" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                    <option value="">Select Department</option>
+                    <option value="HR" {% if employee.department == "HR" %}selected{% endif %}>HR</option>
+                    <option value="Engineering" {% if employee.department == "Engineering" %}selected{% endif %}>Engineering</option>
+                    <option value="Marketing" {% if employee.department == "Marketing" %}selected{% endif %}>Marketing</option>
+                    <option value="Sales" {% if employee.department == "Sales" %}selected{% endif %}>Sales</option>
+                </select>
+            </div>
+
+            <!-- Salary -->
+            <div class="mb-4">
+                <label for="salary" class="block text-sm font-medium text-gray-700">Salary</label>
+                <input autocomplete="off" type="number" id="salary" name="salary" value="{{ employee.salary }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

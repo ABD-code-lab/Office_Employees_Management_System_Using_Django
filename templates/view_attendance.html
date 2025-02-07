@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Attendance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-4">Attendance Records</h1>
+
+        <!-- Search Input -->
+        <div class="mb-4 flex justify-end">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by employee name, date, or status..."
+                class="w-[55%] px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+        </div>
+
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border p-2">Employee</th>
+                    <th class="border p-2">Date</th>
+                    <th class="border p-2">Status</th>
+                    <th class="border p-2">Performance</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceTableBody">
+                {% for attendance in attendances %}
+                <tr class="border">
+                    <td class="border p-2">{{ attendance.employee.name }}</td>
+                    <td class="border p-2">{{ attendance.date }}</td>
+                    <td class="border p-2 {% if attendance.status == 'Present' %}text-green-600{% else %}text-red-600{% endif %}">
+                        {{ attendance.status }}
+                    </td>
+                    <td class="border p-2">
+                        {% for emp_perf in employee_performance %}
+                            {% if emp_perf.employee == attendance.employee %}
+                                {{ emp_perf.performance_stars }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="/mark_attendance" class="flex justify-center m-4 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mx-1 focus:ring-offset-2">Mark Attendance</a>
+        <a href="/" class="flex justify-center m-4 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mx-1 focus:ring-offset-2">Go Back To Home</a>
+    </div>
+
+    <!-- JavaScript for Search Functionality -->
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase(); // Get the search term
+            const rows = document.querySelectorAll('#attendanceTableBody tr'); // Get all table rows
+
+            rows.forEach(row => {
+                const employeeName = row.querySelector('td:nth-child(1)').textContent.toLowerCase(); // Employee name column
+                const date = row.querySelector('td:nth-child(2)').textContent.toLowerCase(); // Date column
+                const status = row.querySelector('td:nth-child(3)').textContent.toLowerCase(); // Status column
+
+                // Check if the search term matches any of the columns
+                if (
+                    employeeName.includes(searchTerm) ||
+                    date.includes(searchTerm) ||
+                    status.includes(searchTerm)
+                ) {
+                    row.style.display = ''; // Show the row
+                } else {
+                    row.style.display = 'none'; // Hide the row
+                }
+            });
+        });
+    </script>
+</body>
+</html>
